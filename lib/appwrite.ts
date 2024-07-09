@@ -6,10 +6,11 @@ import {
 	Databases,
 	Query,
 } from "react-native-appwrite";
+import { Models } from "react-native-appwrite";
 
 export const appwriteConfg = {
 	endpoint: "https://cloud.appwrite.io/v1",
-	plastform: "com.nativejoe.aoravid",
+	platform: "com.nativejoe.aoravid",
 	projectId: "6686b6bb0036e4f258ab",
 	databaseId: "6686be51000108443e4d",
 	usersCollectionId: "6686becd001da55aefd4",
@@ -17,11 +18,18 @@ export const appwriteConfg = {
 	storageId: "6686d140001ca9bda8b4",
 };
 
+const {
+	endpoint,
+	platform,
+	projectId,
+	databaseId,
+	storageId,
+	usersCollectionId,
+	videoCollectionId,
+} = appwriteConfg;
+
 const client = new Client();
-client
-	.setEndpoint(appwriteConfg.endpoint)
-	.setProject(appwriteConfg.projectId)
-	.setPlatform(appwriteConfg.plastform);
+client.setEndpoint(endpoint).setProject(projectId).setPlatform(platform);
 
 const account = new Account(client);
 const avatar = new Avatars(client);
@@ -48,8 +56,8 @@ export const createUser = async (
 		await signIn(email, password);
 
 		const newUser = await database.createDocument(
-			appwriteConfg.databaseId,
-			appwriteConfg.usersCollectionId,
+			databaseId,
+			usersCollectionId,
 			ID.unique(),
 			{
 				accountId: newAccount.$id,
@@ -82,14 +90,37 @@ export const getCurrentUser = async () => {
 		if (!currentAccount) throw Error;
 
 		const currentUser = await database.listDocuments(
-			appwriteConfg.databaseId,
-			appwriteConfg.usersCollectionId,
+			databaseId,
+			usersCollectionId,
 			[Query.equal("accountId", currentAccount.$id)]
 		);
 
 		if (!currentUser) throw Error;
 
 		return currentUser.documents[0];
+	} catch (error: any) {
+		console.log(error);
+		throw new Error(error.message);
+	}
+};
+
+export const getAllPosts = async (): Promise<Models.Document[]> => {
+	try {
+		const posts = await database.listDocuments(databaseId, videoCollectionId);
+		return posts.documents;
+	} catch (error: any) {
+		console.log(error);
+		throw new Error(error.message);
+	}
+};
+
+export const getLatestPosts = async (): Promise<Models.Document[]> => {
+	try {
+		const posts = await database.listDocuments(databaseId, videoCollectionId, [
+			Query.orderDesc("$createdAt"),
+			Query.limit(7),
+		]);
+		return posts.documents;
 	} catch (error: any) {
 		console.log(error);
 		throw new Error(error.message);

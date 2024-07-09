@@ -43,7 +43,7 @@ const FormField: React.FC<FormFieldProps> = ({
 					style={{ color: "white" }}
 					keyboardType={keyboardType}
 					secureTextEntry={showPassword}
-					className="flex-1 text-white fnot-psemi-bold text-base"
+					className="flex-1 text-white font-psemi-bold text-base"
 					placeholderTextColor={"#7B7B8B"}
 					{...props}
 				/>

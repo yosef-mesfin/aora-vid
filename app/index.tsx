@@ -28,7 +28,7 @@ export default function App() {
 					<View className="relative mt-5">
 						<Text className="text-3xl text-white font-bold text-center">
 							Discover Endless Possibilities with{" "}
-							<Text className="text-secondary-200">Aora</Text>
+							<Text className="text-secondary-200">Aora-Vid</Text>
 						</Text>
 						<Image
 							source={images.path}
@@ -38,7 +38,7 @@ export default function App() {
 					</View>
 					<Text className="text-gray-100 text-sm mt-7 font-pregular text-center">
 						Where creativity meets innovation: embark on a journey of endless
-						exploration with Aora.
+						exploration with Aora-Vid.
 					</Text>
 					<CustomButton
 						title="Continue with Email"
