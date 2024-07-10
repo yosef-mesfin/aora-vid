@@ -25,10 +25,10 @@ const zoomIn = {
 };
 
 const zoomOut = {
-	from: {
+	0: {
 		scale: 1,
 	},
-	to: {
+	1: {
 		scale: 0.9,
 	},
 };

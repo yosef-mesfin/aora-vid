@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Models } from "react-native-appwrite";
 import { Alert } from "react-native";
+import { Posts } from "@/types/posts";
 
-export const useAppwrite = (fn: () => Promise<Models.Document[]>) => {
-	const [data, setData] = useState<Models.Document[]>([]);
+export const useAppwrite = (fn: () => Promise<Posts[]>) => {
+	const [data, setData] = useState<Posts[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const fetchData = async () => {

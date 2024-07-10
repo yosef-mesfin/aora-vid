@@ -1,3 +1,4 @@
+import { Posts } from "@/types/posts";
 import {
 	Client,
 	Account,
@@ -104,9 +105,22 @@ export const getCurrentUser = async () => {
 	}
 };
 
-export const getAllPosts = async (): Promise<Models.Document[]> => {
+export type PostTypes = {
+	title: string;
+	video: string;
+	thumbnail: string;
+	creator: {
+		username: string;
+		avatar: string;
+	};
+};
+
+export const getAllPosts = async (): Promise<Posts[]> => {
 	try {
-		const posts = await database.listDocuments(databaseId, videoCollectionId);
+		const posts = await database.listDocuments<Posts>(
+			databaseId,
+			videoCollectionId
+		);
 		return posts.documents;
 	} catch (error: any) {
 		console.log(error);
@@ -114,12 +128,13 @@ export const getAllPosts = async (): Promise<Models.Document[]> => {
 	}
 };
 
-export const getLatestPosts = async (): Promise<Models.Document[]> => {
+export const getLatestPosts = async (): Promise<Posts[]> => {
 	try {
-		const posts = await database.listDocuments(databaseId, videoCollectionId, [
-			Query.orderDesc("$createdAt"),
-			Query.limit(7),
-		]);
+		const posts = await database.listDocuments<Posts>(
+			databaseId,
+			videoCollectionId,
+			[Query.orderDesc("$createdAt"), Query.limit(7)]
+		);
 		return posts.documents;
 	} catch (error: any) {
 		console.log(error);

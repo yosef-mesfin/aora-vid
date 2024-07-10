@@ -1,14 +1,28 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { icons } from "@/constants";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+import { isLoaded } from "expo-font";
 
-const VideoCard = ({ video }: any) => {
+type VideoCardProps = {
+	title: string;
+	creator: string;
+	avatar: string;
+	thumbnail: string;
+	video: string;
+};
+
+const VideoCard: React.FC<VideoCardProps> = ({
+	title,
+	creator,
+	thumbnail,
+	video,
+	avatar,
+}) => {
 	const [play, setPlay] = useState(false);
-	const videoRef = useRef<Video>(null);
 
 	const handlePlaybackStatusUpdate = (status: AVPlaybackStatus) => {
-		if (status.isLoaded && !status.isPlaying && status.didJustFinish) {
+		if (status.isLoaded && status.didJustFinish) {
 			setPlay(false);
 		}
 	};
@@ -19,7 +33,7 @@ const VideoCard = ({ video }: any) => {
 				<View className="flex justify-center items-center flex-row flex-1">
 					<View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
 						<Image
-							source={{ uri: video.creator.avatar }}
+							source={{ uri: avatar }}
 							className="w-full h-full rounded-lg"
 							resizeMode="cover"
 						/>
@@ -30,13 +44,13 @@ const VideoCard = ({ video }: any) => {
 							className="font-psemibold text-sm text-white"
 							numberOfLines={1}
 						>
-							{video.title}
+							{title}
 						</Text>
 						<Text
 							className="text-xs text-gray-100 font-pregular"
 							numberOfLines={1}
 						>
-							{video.creator.username}
+							{creator}
 						</Text>
 					</View>
 				</View>
@@ -48,7 +62,6 @@ const VideoCard = ({ video }: any) => {
 
 			{play ? (
 				<Video
-					ref={videoRef}
 					source={{ uri: video }}
 					className="w-full h-60 rounded-xl mt-3"
 					resizeMode={ResizeMode.CONTAIN}
@@ -63,7 +76,7 @@ const VideoCard = ({ video }: any) => {
 					className="w-full h-60 rounded-xl mt-3 relative flex justify-center items-center"
 				>
 					<Image
-						source={{ uri: video.thumbnail }}
+						source={{ uri: thumbnail }}
 						className="w-full h-full rounded-xl mt-3"
 						resizeMode="cover"
 					/>
