@@ -105,16 +105,6 @@ export const getCurrentUser = async () => {
 	}
 };
 
-export type PostTypes = {
-	title: string;
-	video: string;
-	thumbnail: string;
-	creator: {
-		username: string;
-		avatar: string;
-	};
-};
-
 export const getAllPosts = async (): Promise<Posts[]> => {
 	try {
 		const posts = await database.listDocuments<Posts>(
@@ -134,6 +124,20 @@ export const getLatestPosts = async (): Promise<Posts[]> => {
 			databaseId,
 			videoCollectionId,
 			[Query.orderDesc("$createdAt"), Query.limit(7)]
+		);
+		return posts.documents;
+	} catch (error: any) {
+		console.log(error);
+		throw new Error(error.message);
+	}
+};
+
+export const searchPosts = async (query: string): Promise<Posts[]> => {
+	try {
+		const posts = await database.listDocuments<Posts>(
+			databaseId,
+			videoCollectionId,
+			[Query.search("title", query)]
 		);
 		return posts.documents;
 	} catch (error: any) {
